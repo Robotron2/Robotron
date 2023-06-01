@@ -1,50 +1,38 @@
 int yellowPin = 6;
 int redPin = 9;
-int delayTime = 750;
+int yellowTime = 500;
+int redTime = 500;
+int yellowBlink = 3;
+int redBlink = 5;
+int j;
 
 void setup() {
   // put your setup code here, to run once:
   pinMode(yellowPin, OUTPUT);  
   pinMode(redPin, OUTPUT);  
+  Serial.begin(9600);
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  digitalWrite(yellowPin, HIGH);
-  delay(delayTime);
+  for (j=1; j<=yellowBlink; j++) {
+    digitalWrite(yellowPin, HIGH);
+  delay(yellowTime);
   digitalWrite(yellowPin, LOW);
-  delay(delayTime);
-  digitalWrite(yellowPin, HIGH);
-  delay(delayTime);
-  digitalWrite(yellowPin, LOW);
-  delay(delayTime);
-  digitalWrite(yellowPin, HIGH);
-  delay(delayTime);
-  digitalWrite(yellowPin, LOW);
-  delay(delayTime);
+  delay(yellowTime);
+  Serial.print("Yellow blink: ");
+  Serial.println(j);
+  }
 
+  
+  for (j=1; j<=redBlink; j++) {
   digitalWrite(redPin, HIGH);
-  delay(delayTime);
+  delay(redTime);
   digitalWrite(redPin, LOW);
-  delay(delayTime);
-  digitalWrite(redPin, HIGH);
-  delay(delayTime);
-  digitalWrite(redPin, LOW);
-  delay(delayTime);
-  digitalWrite(redPin, HIGH);
-  delay(delayTime);
-  digitalWrite(redPin, LOW);
-  delay(delayTime);
-  digitalWrite(redPin, HIGH);
-  delay(delayTime);
-  digitalWrite(redPin, LOW);
-  delay(delayTime);
-  digitalWrite(redPin, HIGH);
-  delay(delayTime);
-  digitalWrite(redPin, LOW);
-  delay(delayTime);
-
-
-
+  delay(redTime);
+  Serial.print("Red blink: ");
+  Serial.println(j);
+  }
+  
 }

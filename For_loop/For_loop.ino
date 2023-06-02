@@ -16,23 +16,8 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  for (j=1; j<=yellowBlink; j++) {
-    digitalWrite(yellowPin, HIGH);
-  delay(yellowTime);
-  digitalWrite(yellowPin, LOW);
-  delay(yellowTime);
-  Serial.print("Yellow blink: ");
-  Serial.println(j);
+  for (j = 10; j>=1; j--) {
+    Serial.println(j);
   }
-
-  
-  for (j=1; j<=redBlink; j++) {
-  digitalWrite(redPin, HIGH);
-  delay(redTime);
-  digitalWrite(redPin, LOW);
-  delay(redTime);
-  Serial.print("Red blink: ");
-  Serial.println(j);
-  }
-  
+  Serial.println();
 }

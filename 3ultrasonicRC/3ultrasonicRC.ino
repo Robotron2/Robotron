@@ -1,15 +1,15 @@
 #include <AFMotor.h>
 //Define the sensor pins
-#define S1Trig A0
-#define S2Trig A1
-#define S3Trig A2
-#define S1Echo A3
-#define S2Echo A4
-#define S3Echo A5
-//Set the speed of the motors
-#define Speed 160
+#define sensorOneTrig A0
+#define sensorTwoTrig A1
+#define sensorThreeTrig A2
+#define sensorOneEcho A3
+#define sensorTwoEcho A4
+#define sensorThreeEcho A5
+//Set the speed of the motors in rpm
+#define Speed 200
 
-//Create objects for the motors
+//Create objects for the motors from the AFmotor library
 AF_DCMotor motor1(1);
 AF_DCMotor motor2(2);
 AF_DCMotor motor3(3);
@@ -18,14 +18,16 @@ AF_DCMotor motor4(4);
 void setup() {
   Serial.begin(9600);
   //Set the Trig pins as output pins
-  pinMode(S1Trig, OUTPUT);
-  pinMode(S2Trig, OUTPUT);
-  pinMode(S3Trig, OUTPUT);
+  pinMode(sensorOneTrig, OUTPUT);
+  pinMode(sensorTwoTrig, OUTPUT);
+  pinMode(sensorThreeTrig, OUTPUT);
+  
   //Set the Echo pins as input pins
-  pinMode(S1Echo, INPUT);
-  pinMode(S2Echo, INPUT);
-  pinMode(S3Echo, INPUT);
+  pinMode(sensorOneEcho, INPUT);
+  pinMode(sensorTwoEcho, INPUT);
+  pinMode(sensorThreeEcho, INPUT);
   //Set the speed of the motors
+  
   motor1.setSpeed(Speed);
   motor2.setSpeed(Speed);
   motor3.setSpeed(Speed);
@@ -37,67 +39,72 @@ void loop() {
   int leftSensor = sensorOne();
   int rightSensor = sensorThree();
 // Check the distance using the IF condition
-  if (8 >= centerSensor) {
+  if (50 >= centerSensor) {
     Stop();
     Serial.println("Stop");
-    delay(1000);
+    delay(300);
     if (leftSensor > rightSensor) {
+      //turn left
       left();
       Serial.println("Left");
       delay(500);
     } else {
+      //turn right
       right();
       Serial.println("Right");
       delay(500);
     }
   }
   Serial.println("Forward");
+  //move forward by default.
   forward();
 }
 
-//Get the sensor values
+//////////////////////////////////////////////////////////////////Function to get the sensor values////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Get sensorOne output
 int sensorOne() {
   //pulse output
-  digitalWrite(S1Trig, LOW);
-  delayMicroseconds(4);
-  digitalWrite(S1Trig, HIGH);
+  digitalWrite(sensorOneTrig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(sensorOneTrig, HIGH);
   delayMicroseconds(10);
-  digitalWrite(S1Trig, LOW);
+  digitalWrite(sensorOneTrig, LOW);
 
-  long t = pulseIn(S1Echo, HIGH);//Get the pulse
+  long t = pulseIn(sensorOneEcho, HIGH);//Get the pulse
   int cm = t / 29 / 2; //Convert time to the distance
   return cm; // Return the values from the sensor
 }
 
-//Get the sensor values
+ //Get sensorTwo output
 int sensorTwo() {
   //pulse output
-  digitalWrite(S2Trig, LOW);
-  delayMicroseconds(4);
-  digitalWrite(S2Trig, HIGH);
+  digitalWrite(sensorTwoTrig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(sensorTwoTrig, HIGH);
   delayMicroseconds(10);
-  digitalWrite(S2Trig, LOW);
+  digitalWrite(sensorTwoTrig, LOW);
 
-  long t = pulseIn(S2Echo, HIGH);//Get the pulse
+  long t = pulseIn(sensorTwoEcho, HIGH);//Get the pulse
   int cm = t / 29 / 2; //Convert time to the distance
   return cm; // Return the values from the sensor
 }
 
-//Get the sensor values
+//Get sensorThree output
 int sensorThree() {
   //pulse output
-  digitalWrite(S3Trig, LOW);
-  delayMicroseconds(4);
-  digitalWrite(S3Trig, HIGH);
+  digitalWrite(sensorThreeTrig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(sensorThreeTrig, HIGH);
   delayMicroseconds(10);
-  digitalWrite(S3Trig, LOW);
+  digitalWrite(sensorThreeTrig, LOW);
 
-  long t = pulseIn(S3Echo, HIGH);//Get the pulse
+  long t = pulseIn(sensorThreeEcho, HIGH);//Get the pulse
   int cm = t / 29 / 2; //Convert time to the distance
   return cm; // Return the values from the sensor
 }
 
-/*******************Motor functions**********************/
+///////////////////////////////////////////////////////////////////////////Motor Functions//////////////////////////////////////////////////////////////////
 void forward() {
   motor1.run(FORWARD);
   motor2.run(FORWARD);

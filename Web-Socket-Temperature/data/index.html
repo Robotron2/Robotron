@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Temperature and Humidity</title>
+		<link rel="stylesheet" href="/style.css" />
+	</head>
+
+	<body>
+		<div class="main-container">
+			<div class="sub-container">
+				<div class="title">
+					<h1>Hello there!</h1>
+
+					<h4 id="time"></h4>
+					<p id="date"></p>
+				</div>
+				<div class="dynamic">
+					<div>
+						<p>Temperature: <span id="temperature">--</span></p>
+					</div>
+					<div>
+						<p>Humidity: <span id="humidity">--</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="date-copy">
+				<p>&copy; Robotron <span id="copy"></span></p>
+			</div>
+		</div>
+		<script>
+			let ws
+			function initWebSocket() {
+				ws = new WebSocket("ws://" + window.location.hostname + "/ws")
+				ws.onmessage = function (event) {
+					let data = JSON.parse(event.data)
+					document.getElementById("temperature").innerText = data.temperature.toFixed(2) + "°C"
+					document.getElementById("humidity").innerText = data.humidity.toFixed(2) + "%"
+				}
+			}
+			window.onload = function () {
+				initWebSocket()
+			}
+
+			let displayDiv = document.getElementById("time")
+			let dateDiv = document.getElementById("date")
+			let copyDIv = document.getElementById("copy")
+			const date = new Date()
+			const formatter = new Intl.DateTimeFormat("en-US", { day: "2-digit", month: "2-digit", year: "numeric" })
+			const formattedDate = formatter.format(date)
+			dateDiv.innerText = formattedDate
+			copyDIv.innerText = date.getFullYear()
+
+			const clock = () => {
+				let newDate = new Date()
+				let currentHour = formatTime(newDate.getHours())
+				let currentMin = formatTime(newDate.getMinutes())
+				let currentSec = formatTime(newDate.getSeconds())
+				displayDiv.innerHTML = `${currentHour} : ${currentMin} : ${currentSec}`
+			}
+
+			const formatTime = (currentTime) => {
+				if (currentTime < 10) {
+					return `0${currentTime}`
+				}
+				return currentTime
+			}
+			setInterval(clock, 1000)
+		</script>
+	</body>
+</html>
